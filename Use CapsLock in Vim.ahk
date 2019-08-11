@@ -1,4 +1,5 @@
 ; Ignore attempts to launch when the script is already-running.
+; Side effect: A quick click of CapsLock will also send a LCtrl besides the Esc.
 #SingleInstance Ignore
 
 SetStoreCapslockMode Off
