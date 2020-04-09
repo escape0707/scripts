@@ -1,6 +1,6 @@
 ; Translate Selected text using GoldenDict
 
-; Ignore attempts to launch when the script is already running.
+; Ignore attempts to launch when the script is already running
 #SingleInstance Ignore
 
 ; Get install path and start GoldenDict (32bit)
@@ -12,7 +12,8 @@ GoldenDictPath := InstallPath . "\GoldenDict.exe"
 ; Run GoldenDict if it's not running
 Process, Exist, GoldenDict.exe
 if (!ErrorLevel) {
-    Run, %GoldenDictPath%   ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
+    ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
+    Run, %GoldenDictPath%
 }
 
 ; Register clean up function to be called on exit
@@ -22,10 +23,11 @@ CloseGoldenDict() {
 }
 
 ; Use Window Spy shipped with AutoHotKey installation to find other windows you want this script to ignore, then add them below
-GroupAdd, IgnoreWindowsGroup, ahk_class CabinetWClass   ; Ignore File Explorer
-GroupAdd, IgnoreWindowsGroup, ahk_class Progman         ; Ignore Desktop
-GroupAdd, IgnoreWindowsGroup, ahk_class Shell_TrayWnd   ; Ignore Taskbar
-GroupAdd, IgnoreWindowsGroup, ahk_exe Code.exe          ; Ignore Visual Studio Code
+GroupAdd, IgnoreWindowsGroup, ahk_class ConsoleWindowClass    ; Console
+GroupAdd, IgnoreWindowsGroup, ahk_exe   Code - Insiders.exe   ; Visual Studio Code - Insiders
+GroupAdd, IgnoreWindowsGroup, ahk_exe   Code.exe              ; Visual Studio Code
+GroupAdd, IgnoreWindowsGroup, ahk_exe   Explorer.EXE          ; File Explorer
+GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe   ; Windows Terminal (preview)
 
 ; Avoid this script to be actived in above window classes
 #IfWinNotActive ahk_group IgnoreWindowsGroup
@@ -39,6 +41,10 @@ MouseDownPositionX := 0
 MouseDownPositionY := 0
 DoubleClickTime := DllCall("GetDoubleClickTime")
 DoubleClicked := False
+
+
+; Optional hotkey to toggle this script's suspending. Remove the semicolon in the next line if you need it
+; F8::Suspend
 
 
 ~LButton::
@@ -69,6 +75,7 @@ DoubleClicked := False
     return
 
 
+; You can optionally comment out all following lines contains `ClipboardSave` to let the copied word remain in the clipboard
 TranslateRoutine:
     ClipboardSave := ClipboardAll
     Clipboard :=
@@ -79,7 +86,7 @@ TranslateRoutine:
         Selected := Trim(Clipboard, " `t`r`n")
     }
     Clipboard := ClipboardSave
-    ; Free the memory in case the Clipboard was very large.
+    ; Free the memory in case the Clipboard was very large
     ClipboardSave :=
     if (ErrorLevel) {
         return
