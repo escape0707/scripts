@@ -27,9 +27,9 @@ GroupAdd, IgnoreWindowsGroup, ahk_class ConsoleWindowClass    ; Console
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Code - Insiders.exe   ; Visual Studio Code - Insiders
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Code.exe              ; Visual Studio Code
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Explorer.EXE          ; File Explorer
-GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe   ; Windows Terminal (preview)
+GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe   ; Windows Terminal
 
-; Avoid this script to be actived in above window classes
+; Avoid this script to be activated in above window classes
 #IfWinNotActive ahk_group IgnoreWindowsGroup
 
 ; Set coordinate mode for mouse to be relative to the entire screen to correctly handle the position of clicks' which activate another window
