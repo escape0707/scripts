@@ -3,6 +3,7 @@
 ; Ignore attempts to launch when the script is already running
 #SingleInstance Ignore
 
+
 ; Utility functions definitions: START
 FindGoldenDictPath() {
   ; Find a installed GoldenDict
@@ -24,10 +25,12 @@ FindGoldenDictPath() {
   Throw, "No GoldenDict installation could be found. You could still modify this .ahk file manually to provide a valid GoldenDictPath."
 }
 
+
 CloseGoldenDict() {
     Process, Close, GoldenDict.exe
 }
 ; Utility functions definitions: END
+
 
 ; Main Thread: START
 ; Run GoldenDict if it's not running
@@ -47,9 +50,6 @@ GroupAdd, IgnoreWindowsGroup, ahk_exe   Code - Insiders.exe   ; Visual Studio Co
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Code.exe              ; Visual Studio Code
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Explorer.EXE          ; File Explorer
 GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe   ; Windows Terminal
-
-; Avoid this script to be activated in above window classes
-#IfWinNotActive ahk_group IgnoreWindowsGroup
 
 ; Set coordinate mode for mouse to be relative to the entire screen to correctly handle the position of clicks' which activate another window
 CoordMode, Mouse, Screen
@@ -97,6 +97,10 @@ DoubleClicked := False
 
 ; You can optionally comment out all following lines contains `ClipboardSave` to let the copied word remain in the clipboard
 TranslateRoutine:
+    ; Don't lookup word in previously specified window classes
+    if WinActive("ahk_group IgnoreWindowsGroup") {
+      Return
+    }
     ClipboardSave := ClipboardAll
     Clipboard :=
     SendInput, ^c
