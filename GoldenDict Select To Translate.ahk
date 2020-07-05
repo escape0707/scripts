@@ -3,24 +3,43 @@
 ; Ignore attempts to launch when the script is already running
 #SingleInstance Ignore
 
-; Get install path and start GoldenDict (32bit)
-SetRegView 32
-RegRead, FullFileName, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoldenDict, UninstallString
-SplitPath, FullFileName,, InstallPath
-GoldenDictPath := InstallPath . "\GoldenDict.exe"
+; Utility functions definitions: START
+FindGoldenDictPath() {
+  ; Find a installed GoldenDict
+  PreviousRegView := A_RegView
+  SetRegView, 32
+  RegRead, FullFilePath, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoldenDict, UninstallString
+  SetRegView, %PreviousRegView%
+  if (!ErrorLevel) {
+      SplitPath, FullFilePath,, InstallPath
+      Return, InstallPath . "\GoldenDict.exe"
+  }
 
+  ; If GoldenDict is not installed normally, check whether a scoop installed version exist
+  ScoopFilePath := "C:\Users\" . A_UserName . "\scoop\apps\goldendict\current\GoldenDict.exe"
+  if FileExist(ScoopFilePath) {
+      Return, ScoopFilePath
+  }
+
+  Throw, "No GoldenDict installation could be found. You could still modify this .ahk file manually to provide a valid GoldenDictPath."
+}
+
+CloseGoldenDict() {
+    Process, Close, GoldenDict.exe
+}
+; Utility functions definitions: END
+
+; Main Thread: START
 ; Run GoldenDict if it's not running
 Process, Exist, GoldenDict.exe
 if (!ErrorLevel) {
+    GoldenDictPath := FindGoldenDictPath()
     ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
     Run, %GoldenDictPath%
 }
 
 ; Register clean up function to be called on exit
 OnExit("CloseGoldenDict")
-CloseGoldenDict() {
-    Process, Close, GoldenDict.exe
-}
 
 ; Use Window Spy shipped with AutoHotKey installation to find other windows you want this script to ignore, then add them below
 GroupAdd, IgnoreWindowsGroup, ahk_class ConsoleWindowClass    ; Console
@@ -45,6 +64,7 @@ DoubleClicked := False
 
 ; Optional hotkey to toggle this script's suspending. Remove the semicolon in the next line if you need it
 ; F8::Suspend
+; Main thread: END
 
 
 ~LButton::
