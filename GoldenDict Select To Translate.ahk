@@ -6,23 +6,23 @@
 
 ; Utility functions definitions: START
 FindGoldenDictPath() {
-  ; Find a installed GoldenDict
-  PreviousRegView := A_RegView
-  SetRegView, 32
-  RegRead, FullFilePath, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoldenDict, UninstallString
-  SetRegView, %PreviousRegView%
-  if (!ErrorLevel) {
-      SplitPath, FullFilePath,, InstallPath
-      Return, InstallPath . "\GoldenDict.exe"
-  }
+    ; Find a installed GoldenDict
+    PreviousRegView := A_RegView
+    SetRegView, 32
+    RegRead, FullFilePath, HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GoldenDict, UninstallString
+    SetRegView, %PreviousRegView%
+    if (!ErrorLevel) {
+        SplitPath, FullFilePath,, InstallPath
+        Return, InstallPath . "\GoldenDict.exe"
+    }
 
-  ; If GoldenDict is not installed normally, check whether a scoop installed version exist
-  ScoopFilePath := "C:\Users\" . A_UserName . "\scoop\apps\goldendict\current\GoldenDict.exe"
-  if FileExist(ScoopFilePath) {
-      Return, ScoopFilePath
-  }
+    ; If GoldenDict is not installed normally, check whether a scoop installed version exist
+    ScoopFilePath := "C:\Users\" . A_UserName . "\scoop\apps\goldendict\current\GoldenDict.exe"
+    if FileExist(ScoopFilePath) {
+        Return, ScoopFilePath
+    }
 
-  Throw, "No GoldenDict installation could be found. You could still modify this .ahk file manually to provide a valid GoldenDictPath."
+    Throw, "No GoldenDict installation could be found. You could still modify this .ahk file manually to provide a valid GoldenDictPath."
 }
 
 
@@ -33,10 +33,10 @@ CloseGoldenDict() {
 
 
 ; Main Thread: START
+GoldenDictPath := FindGoldenDictPath()
 ; Run GoldenDict if it's not running
 Process, Exist, GoldenDict.exe
 if (!ErrorLevel) {
-    GoldenDictPath := FindGoldenDictPath()
     ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
     Run, %GoldenDictPath%
 }
