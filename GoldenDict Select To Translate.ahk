@@ -29,6 +29,37 @@ FindGoldenDictPath() {
 CloseGoldenDict() {
     Process, Close, GoldenDict.exe
 }
+
+
+; You can optionally comment out all following lines contains `ClipboardSave` to let the copied word remain in the clipboard
+TranslateRoutine() {
+    global GoldenDictPath
+    ; Don't lookup word in previously specified window classes
+    if WinActive("ahk_group IgnoreWindowsGroup") {
+      Return
+    }
+    ClipboardSave := ClipboardAll
+    Clipboard :=
+    SendInput, ^c
+
+    ClipWait, 0
+    if (!ErrorLevel) {
+        Selected := Trim(Clipboard, " `t`r`n")
+    }
+    Clipboard := ClipboardSave
+    ; Free the memory in case the Clipboard was very large
+    ClipboardSave :=
+    if (ErrorLevel) {
+        return
+    }
+
+    SelectedLength := StrLen(Selected)
+    if (SelectedLength <= 0 or SelectedLength > 50) {
+        return
+    }
+    Selected := """" . Selected . """"
+    Run, %GoldenDictPath% %Selected%
+}
 ; Utility functions definitions: END
 
 
@@ -37,8 +68,8 @@ GoldenDictPath := FindGoldenDictPath()
 ; Run GoldenDict if it's not running
 Process, Exist, GoldenDict.exe
 if (!ErrorLevel) {
-    ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
     Run, %GoldenDictPath%
+    ; Unfortunately, run options like Max|Min|Hide won't work for GoldenDict
 }
 
 ; Register clean up function to be called on exit
@@ -85,43 +116,13 @@ DoubleClicked := False
 ~LButton Up::
     if (DoubleClicked) {
         DoubleClicked := False
-        Gosub, TranslateRoutine
+        TranslateRoutine()
         return
     }
 
     MouseGetPos MouseUpPositionX, MouseUpPositionY
     ; If mouse moved
     if (Abs(MouseUpPositionX - MouseDownPositionX) + Abs(MouseUpPositionY - MouseDownPositionY) > 5) {
-        GoSub, TranslateRoutine
+        TranslateRoutine()
     }
-    return
-
-
-; You can optionally comment out all following lines contains `ClipboardSave` to let the copied word remain in the clipboard
-TranslateRoutine:
-    ; Don't lookup word in previously specified window classes
-    if WinActive("ahk_group IgnoreWindowsGroup") {
-      Return
-    }
-    ClipboardSave := ClipboardAll
-    Clipboard :=
-    SendInput, ^c
-
-    ClipWait, 0
-    if (!ErrorLevel) {
-        Selected := Trim(Clipboard, " `t`r`n")
-    }
-    Clipboard := ClipboardSave
-    ; Free the memory in case the Clipboard was very large
-    ClipboardSave :=
-    if (ErrorLevel) {
-        return
-    }
-
-    SelectedLength := StrLen(Selected)
-    if (SelectedLength <= 0 or SelectedLength > 50) {
-        return
-    }
-    Selected := """" . Selected . """"
-    Run, %GoldenDictPath% %Selected%
     return
