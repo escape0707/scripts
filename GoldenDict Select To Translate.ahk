@@ -83,6 +83,7 @@ GroupAdd, IgnoreWindowsGroup, ahk_exe   Explorer.EXE            ; File Explorer
 GroupAdd, IgnoreWindowsGroup, ahk_exe   ScreenClippingHost.exe  ; Snip & Sketch
 GroupAdd, IgnoreWindowsGroup, ahk_exe   vlc.exe                 ; VLC media player
 GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe     ; Windows Terminal
+GroupAdd, IgnoreWindowsGroup, ahk_exe   qbittorrent.exe         ; qBittorrent
 
 ; Set coordinate mode for mouse to be relative to the entire screen to correctly handle the position of clicks' which activate another window
 CoordMode, Mouse, Screen
