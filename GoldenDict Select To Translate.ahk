@@ -46,7 +46,8 @@ TranslateRoutine() {
     if (!ErrorLevel) {
         Selected := Trim(Clipboard, " `t`r`n")
     }
-    Clipboard := ClipboardSave
+    ; Clipboard := ClipboardSave
+    Clipboard := Selected ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; My Customization
     ; Free the memory in case the Clipboard was very large
     ClipboardSave :=
     if (ErrorLevel) {
@@ -80,6 +81,8 @@ GroupAdd, IgnoreWindowsGroup, ahk_class ConsoleWindowClass      ; Console
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Code - Insiders.exe     ; Visual Studio Code - Insiders
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Code.exe                ; Visual Studio Code
 GroupAdd, IgnoreWindowsGroup, ahk_exe   Explorer.EXE            ; File Explorer
+GroupAdd, IgnoreWindowsGroup, ahk_exe   GoldenDict.exe          ; GoldenDict
+GroupAdd, IgnoreWindowsGroup, ahk_exe   mpv.exe                 ; MPV media player
 GroupAdd, IgnoreWindowsGroup, ahk_exe   ScreenClippingHost.exe  ; Snip & Sketch
 GroupAdd, IgnoreWindowsGroup, ahk_exe   vlc.exe                 ; VLC media player
 GroupAdd, IgnoreWindowsGroup, ahk_exe   WindowsTerminal.exe     ; Windows Terminal
