@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
+"DAOpenSans"="Microsoft YaHei UI"
+"DAOpenSansBold"="Microsoft YaHei UI Bold"
+"DAOpenSansBoldItalic"="Microsoft YaHei UI"
+"DAOpenSansRegular"="Microsoft YaHei UI"
+"DAOpenSansRegularItalic"="Microsoft YaHei UI"
+"DAOpenSansSemibold"="Microsoft YaHei UI"
+"DAOpenSansSemiboldItalic"="Microsoft YaHei UI"
+"DAVazir"="Microsoft YaHei UI"
+"DAVazirBold"="Microsoft YaHei UI Bold"
+"DAVazirMedium"="Microsoft YaHei UI Light"
+"DAVazirRegular"="Microsoft YaHei UI"
+;; Priority font resolving: "Cascadia Mono", "Consolas", "Liberation Mono", "Menlo", "Courier"
+;; Override monospace font:
+"Cascadia Mono"="Consolas"
